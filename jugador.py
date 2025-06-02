@@ -11,7 +11,10 @@ class Jugador:
         self.intentos = 0
     
     def mostrar(self):
-        return f"Jugador: {self.nombre}, Puntaje: {self.puntaje}, Intentos: {self.intentos}"
+        print('Nombre: ' +self.nombre)
+        print('Puntaje: '+str(self.puntaje))
+        print('Intentos: '+ str(self.intentos))
+
 
     def aumentaIntentos (self):
         #Acumula los intentos que le toma ganar
@@ -27,4 +30,4 @@ class Jugador:
         self.intentos = 0
 
 jugador1= Jugador('Avril')
-jugador1.mostrar
+jugador1.mostrar()
