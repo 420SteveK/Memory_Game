@@ -1,0 +1,23 @@
+from tkinter import *
+from PIL import Image, ImageTk
+
+def Menu_Win(Imagen):
+    # Configuración del menú principal
+    Menu = Tk()
+    Menu.title("Memory Game, by @Kendall_MA & @Avri_AS")
+    Menu.minsize(1920, 1080)
+    Menu.resizable(width=NO, height=NO)
+
+    # Cargar la imagen de fondo
+    bg_image = Image.open(Imagen)
+    bg_image = bg_image.resize((1920, 1080), Image.ANTIALIAS)
+    bg_photo = ImageTk.PhotoImage(bg_image)
+
+    # Crear un label para la imagen de fondo
+    bg_label = Label(Menu, image=bg_photo)
+    bg_label.image = bg_photo  # Mantener referencia
+    bg_label.place(x=0, y=0, relwidth=1, relheight=1)
+
+    # ...aquí puedes agregar más widgets encima del fondo...
+
+    Menu.mainloop()
