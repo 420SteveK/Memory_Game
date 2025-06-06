@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from Gear import MemoryGameLogic
+import jugador
 
 ######## -------->Ventana Menu Principal<--------########
 
@@ -58,7 +59,12 @@ def Classic_Win():
     canvas.image = Fondo_Img
     Classic.fondo_img = Fondo_Img
 
-    # Aquí solo llamas a la lógica
-    MemoryGameLogic(canvas, Classic)
+    # --- TEMPORIZADOR ---
+    timer_label = Label(Classic, text="Tiempo: 0",
+                        font=("Arial", 24), bg="#ffffff")
+    timer_label.place(x=550, y=10)
+
+    # Pasa el label al constructor de la lógica
+    MemoryGameLogic(canvas, Classic, timer_label)
 
     Classic.mainloop()
