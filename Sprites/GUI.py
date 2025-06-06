@@ -1,5 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
+from Gear import MemoryGameLogic
 
 ######## -------->Ventana Menu Principal<--------########
 
@@ -49,28 +50,15 @@ def Classic_Win():
     canvas = Canvas(Classic, width=1200, height=675, highlightthickness=0)
     canvas.place(x=0, y=0)
 
+    # Fondo
     FondoImg = Image.open(
         r"c:\Users\Kendall\Desktop\Memory_Game\Sprites\fondo_default.jpg")
     Fondo_Img = ImageTk.PhotoImage(FondoImg)
     canvas.create_image(0, 0, anchor=NW, image=Fondo_Img)
     canvas.image = Fondo_Img
-    Classic.fondo_img = Fondo_Img  # Mantener referencia
+    Classic.fondo_img = Fondo_Img
 
-    # --- TEMPORIZADOR ---
-    timer_value = [0]  # Usar lista para mutabilidad en closure
-    timer_state = [True]  # Estado alternante
+    # Aquí solo llamas a la lógica
+    MemoryGameLogic(canvas, Classic)
 
-    timer_label = Label(Classic, text="Tiempo: 0",
-                        font=("Arial", 24), bg="#ffffff")
-    timer_label.place(x=550, y=10)
-
-    def update_timer():
-        timer_label.config(text=f"Tiempo: {timer_value[0]}")
-        timer_value[0] += 1
-        if timer_value[0] > 10:
-            timer_value[0] = 0
-            timer_state[0] = not timer_state[0]
-        Classic.after(1000, update_timer)
-
-    update_timer()
-    # --- FIN TEMPORIZADOR ---
+    Classic.mainloop()

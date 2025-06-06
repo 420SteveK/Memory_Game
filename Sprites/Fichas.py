@@ -1,24 +1,20 @@
+from tkinter import Canvas
+from PIL import Image, ImageTk
+
 class Fichas:
-    def __init__(self, Jugador_Pert, Estado, Color, Descubierto, X, Y):
-        self.Jugador_Pert = Jugador_Pert
-        self.Estado = Estado
-        self.Color = Color
-        self.Descubierto = Descubierto
-        self.X = X
-        self.Y = Y
+    def __init__(self, canvas, x, y, nombre_f, nombre_r):
+        self.canvas = canvas
+        self.x = x
+        self.y = y
+        self.nombre_f = nombre_f  # Imagen oculta (Ficha_00.png)
+        self.nombre_r = nombre_r  # Imagen real (Ficha_01.png ... Ficha_18.png)
+        self.estado = "oculta"    # Puede ser "oculta", "revelada", "lograda"
+        self.img_oculta = ImageTk.PhotoImage(Image.open(nombre_f))
+        self.img_real = ImageTk.PhotoImage(Image.open(nombre_r))
+        self.img_chk = ImageTk.PhotoImage(Image.open("c:/Users/Kendall/Desktop/Memory_Game/Sprites/Ficha_Chk.png"))
+        self.id = self.canvas.create_image(x, y, image=self.img_oculta, anchor="nw")
+        self.canvas.tag_bind(self.id, "<Button-1>", self.revelar)
 
-    def CrearFicha(self):
-        print("Hello")
-
-    def CambiarEstado(self, Nuevo_Estado):
-
-
-FichaX01 = Fichas("Jugador1", "Oculta", "Ficha01", "No_Suma")
-FichaO01 = Fichas("Jugador1", "Oculta", "Ficha01", "No_Suma")
-FichaX02 = Fichas("Jugador1", "Oculta", "Ficha02", "No_Suma")
-FichaO02 = Fichas("Jugador1", "Oculta", "Ficha02", "No_Suma")
-
-FichaX01 = Fichas("Jugador2", "Oculta", "Ficha01", "No_Suma")
-FichaO01 = Fichas("Jugador2", "Oculta", "Ficha01", "No_Suma")
-FichaX02 = Fichas("Jugador2", "Oculta", "Ficha02", "No_Suma")
-FichaO02 = Fichas("Jugador2", "Oculta", "Ficha02", "No_Suma")
+    def revelar(self, event):
+        if self.estado == "oculta" and self.canvas.master.juego_activo:
+            self.canvas.master.revelar_ficha(self)
