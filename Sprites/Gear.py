@@ -4,7 +4,7 @@ import random
 import jugador
 
 
-class MemoryGameLogic:
+class MemoryGear:
     def __init__(self, canvas, master, timer_label):
         self.canvas = canvas
         self.master = master

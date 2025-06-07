@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from Gear import MemoryGameLogic
+from Gear import MemoryGear
 import jugador
 
 ######## -------->Ventana Menu Principal<--------########
@@ -65,6 +65,6 @@ def Classic_Win():
     timer_label.place(x=550, y=10)
 
     # Pasa el label al constructor de la lógica
-    MemoryGameLogic(canvas, Classic, timer_label)
+    MemoryGear(canvas, Classic, timer_label)
 
     Classic.mainloop()
