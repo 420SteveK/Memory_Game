@@ -5,5 +5,3 @@ import Gear
 import GUI
 
 GUI.Menu_Win()
-
-Log_in()
