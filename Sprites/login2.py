@@ -1,7 +1,9 @@
+from tkinter import messagebox, font as tkfont
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import messagebox, simpledialog
-import base64
+import face_gui
+
 
 class SakuraLogin(tk.Tk):
     def __init__(self):
@@ -14,11 +16,14 @@ class SakuraLogin(tk.Tk):
         # Set up fonts
         self.font_large = tkfont.Font(family="Poppins", size=24, weight="bold")
         self.font_medium = tkfont.Font(family="Poppins", size=12)
-        self.font_button = tkfont.Font(family="Poppins", size=11, weight="bold")
+        self.font_button = tkfont.Font(
+            family="Poppins", size=11, weight="bold")
 
         # Container frame with slight glassmorphism effect
-        self.container = tk.Frame(self, bg="#2c2c2c", bd=0, highlightthickness=0)
-        self.container.place(relx=0.5, rely=0.5, anchor="center", width=370, height=460)
+        self.container = tk.Frame(
+            self, bg="#2c2c2c", bd=0, highlightthickness=0)
+        self.container.place(relx=0.5, rely=0.5,
+                             anchor="center", width=370, height=460)
 
         # Title label
         self.title_label = tk.Label(
@@ -31,14 +36,16 @@ class SakuraLogin(tk.Tk):
         self.title_label.pack(pady=(40, 30))
 
         # Username entry with label
-        self.user_label = tk.Label(self.container, text="Username", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
+        self.user_label = tk.Label(
+            self.container, text="Username", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
         self.user_label.pack(anchor="w", padx=40)
         self.user_entry = tk.Entry(self.container, font=self.font_medium, bg="#1a1a1a", fg="#ffc0cb", insertbackground="#ffc0cb",
                                    relief="flat", bd=2, justify="left", highlightthickness=0, width=28)
         self.user_entry.pack(pady=(2, 20), padx=40, ipady=8)
 
         # Password entry with label
-        self.pass_label = tk.Label(self.container, text="Password", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
+        self.pass_label = tk.Label(
+            self.container, text="Password", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
         self.pass_label.pack(anchor="w", padx=40)
         self.pass_entry = tk.Entry(self.container, font=self.font_medium, bg="#1a1a1a", fg="#ffc0cb", insertbackground="#ffc0cb",
                                    relief="flat", bd=2, justify="left", show="*", highlightthickness=0, width=28)
@@ -83,7 +90,7 @@ class SakuraLogin(tk.Tk):
         # Register button for face registration
         self.register_btn = tk.Button(
             self.container,
-            text="Registrar cara nueva",
+            text="Ingresar mediante reconocimiento facial",
             font=self.font_button,
             bg="#ff69b4",
             fg="#1a1a1a",
@@ -91,7 +98,7 @@ class SakuraLogin(tk.Tk):
             activeforeground="#fff",
             relief="flat",
             width=30,
-            command=self.register_face_popup
+            command=self.login_face  # Usa el método que ya tienes
         )
         self.register_btn.pack(pady=(10, 12))
         self._add_hover(self.register_btn, "#ff69b4", "#ff1493")
@@ -129,7 +136,8 @@ class SakuraLogin(tk.Tk):
         self._add_hover(self.face_btn, "#ff69b4", "#ff1493")
 
         # Subtle shadow effect using empty label (fake shadow)
-        self.shadow_label = tk.Label(self.container, bg="#000000", width=50, height=2)
+        self.shadow_label = tk.Label(
+            self.container, bg="#000000", width=50, height=2)
         self.shadow_label.pack(side="bottom", pady=(30, 0))
 
     def _add_hover(self, button, normal_bg, hover_bg):
@@ -137,6 +145,7 @@ class SakuraLogin(tk.Tk):
             button['background'] = hover_bg
             button['foreground'] = "#fff"
             button.configure(cursor="hand2")
+
         def on_leave(e):
             button['background'] = normal_bg
             button['foreground'] = "#1a1a1a"
@@ -148,7 +157,8 @@ class SakuraLogin(tk.Tk):
         username = self.user_entry.get().strip()
         password = self.pass_entry.get().strip()
         if not username or not password:
-            messagebox.showwarning("Datos incompletos", "Por favor ingrese su nombre y contrasenia.")
+            messagebox.showwarning(
+                "Datos incompletos", "Por favor ingrese su nombre y contrasenia.")
             return
 
         encontrado = False
@@ -171,7 +181,8 @@ class SakuraLogin(tk.Tk):
         if encontrado:
             messagebox.showinfo("Confirmado", f"Bienvenid@, {username}!")
         else:
-            messagebox.showerror("Usuario no encontrado", "Usuario o contraseña incorrectos.")
+            messagebox.showerror("Usuario no encontrado",
+                                 "Usuario o contraseña incorrectos.")
 
     def exit_app(self):
         self.destroy()
@@ -185,7 +196,8 @@ class SakuraLogin(tk.Tk):
         popup.resizable(False, False)
         popup.grab_set()  # Modal behavior
 
-        label = tk.Label(popup, text="Ingresa tu nombre para registrar tu cara: ", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
+        label = tk.Label(popup, text="Ingresa tu nombre para registrar tu cara: ",
+                         font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
         label.pack(pady=(20, 12))
 
         name_entry = tk.Entry(popup, font=self.font_medium, bg="#1a1a1a", fg="#ffc0cb", insertbackground="#ffc0cb",
@@ -196,10 +208,12 @@ class SakuraLogin(tk.Tk):
         def submit():
             name = name_entry.get().strip()
             if not name:
-                messagebox.showwarning("Input Needed", "Por favor ingresa tu nombre.")
+                messagebox.showwarning(
+                    "Input Needed", "Por favor ingresa tu nombre.")
                 return
             # Here, you might normally trigger actual face registration logic
-            messagebox.showinfo("Face Registered", f"Face for '{name}' has been registered successfully.")
+            messagebox.showinfo(
+                "Face Registered", f"Face for '{name}' has been registered successfully.")
             popup.destroy()
 
         submit_btn = tk.Button(popup, text="Register Face", font=self.font_button,
@@ -220,30 +234,34 @@ class SakuraLogin(tk.Tk):
         popup.resizable(False, False)
         popup.grab_set()  # Modal behavior
 
-        label_username = tk.Label(popup, text="Ingresa tu nombre de usuario: ", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
+        label_username = tk.Label(popup, text="Ingresa tu nombre de usuario: ",
+                                  font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
         label_username.pack(pady=(20, 12))
 
         username_entry = tk.Entry(popup, font=self.font_medium, bg="#1a1a1a", fg="#ffc0cb", insertbackground="#ffc0cb",
-                                   relief="flat", bd=2, justify="left", highlightthickness=0, width=25)
+                                  relief="flat", bd=2, justify="left", highlightthickness=0, width=25)
         username_entry.pack(pady=(0, 10), ipady=6)
 
-        label_password = tk.Label(popup, text="Ingresa tu contraseña: ", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
+        label_password = tk.Label(
+            popup, text="Ingresa tu contraseña: ", font=self.font_medium, fg="#ffc0cb", bg="#2c2c2c")
         label_password.pack(pady=(10, 12))
 
         password_entry = tk.Entry(popup, font=self.font_medium, bg="#1a1a1a", fg="#ffc0cb", insertbackground="#ffc0cb",
-                                   relief="flat", bd=2, justify="left", show="*", highlightthickness=0, width=25)
+                                  relief="flat", bd=2, justify="left", show="*", highlightthickness=0, width=25)
         password_entry.pack(pady=(0, 20), ipady=6)
 
         def submit():
             username = username_entry.get().strip()
             password = password_entry.get().strip()
             if not username or not password:
-                messagebox.showwarning("Input Needed", "Por favor ingresa tu nombre de usuario y contraseña.")
+                messagebox.showwarning(
+                    "Input Needed", "Por favor ingresa tu nombre de usuario y contraseña.")
                 return
             # Guardar en texto plano como matriz
             with open("usuarios.txt", "a", encoding="utf-8") as f:
                 f.write(str([[username, password]]) + "\n")
-            messagebox.showinfo("Credenciales Registradas", f"Credenciales para '{username}' han sido registradas exitosamente.")
+            messagebox.showinfo("Credenciales Registradas",
+                                f"Credenciales para '{username}' han sido registradas exitosamente.")
             popup.destroy()
 
         submit_btn = tk.Button(popup, text="Registrar Credenciales", font=self.font_button,
@@ -256,7 +274,10 @@ class SakuraLogin(tk.Tk):
         popup.protocol("WM_DELETE_WINDOW", on_close)
 
     def login_face(self):
-        messagebox.showinfo("Facial Recognition", "Facial recognition login is not implemented yet.")
+        # Open the facial recognition window
+        face_window = face_gui.face_gui(self)
+        face_window.grab_set()  # Make it modal
+
 
 if __name__ == "__main__":
     try:
@@ -268,3 +289,47 @@ if __name__ == "__main__":
 
     app = SakuraLogin()
     app.mainloop()
+
+
+class face_gui(tk.Toplevel):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.title("Reconocimiento Facial (LBPH)")
+        self.geometry("430x400")
+        self.configure(bg="#1a1a1a")
+        self.resizable(False, False)
+
+        self.font_large = tkfont.Font(family="Poppins", size=20, weight="bold")
+        self.font_button = tkfont.Font(
+            family="Poppins", size=11, weight="bold")
+
+        card = tk.Frame(self, bg="#2c2c2c", bd=0, highlightthickness=0)
+        card.place(relx=0.5, rely=0.5, anchor="center", width=370, height=320)
+
+        tk.Label(card, text="Reconocimiento Facial\n(OpenCV + LBPH)",
+                 font=self.font_large, bg="#2c2c2c", fg="#ffc0cb").pack(pady=(30, 18))
+
+        tk.Button(card, text="Registrar nuevo rostro",
+                  font=self.font_button, bg="#ff69b4", fg="#1a1a1a",
+                  activebackground="#ff1493", activeforeground="#fff",
+                  relief="flat", width=28, height=2,
+                  command=self.register_face).pack(pady=10)
+
+        tk.Button(card, text="Iniciar sesión con rostro",
+                  font=self.font_button, bg="#ffc0cb", fg="#1a1a1a",
+                  activebackground="#ff69b4", activeforeground="#fff",
+                  relief="flat", width=28, height=2,
+                  command=self.login_face).pack(pady=10)
+
+        tk.Button(card, text="Salir", font=self.font_button,
+                  bg="#1a1a1a", fg="#ffc0cb", activebackground="#ff1493",
+                  activeforeground="#fff", relief="flat", width=28, height=2,
+                  command=self.destroy).pack(pady=10)
+
+    def register_face(self):
+        messagebox.showinfo("Registrar rostro",
+                            "Función de registro de rostro aquí.")
+
+    def login_face(self):
+        messagebox.showinfo(
+            "Login rostro", "Función de login con rostro aquí.")
