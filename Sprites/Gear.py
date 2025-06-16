@@ -4,8 +4,8 @@ import random
 import jugador
 
 
-class MemoryGear:
-    def __init__(self, canvas, master, timer_label):
+class MemoryGameLogic:
+    def __init__(self, canvas, master, timer_label,modo_bot=False):
         self.canvas = canvas
         self.master = master
         self.timer_label = timer_label
@@ -15,6 +15,7 @@ class MemoryGear:
         self.juego_activo = True
         self.fichas = []
         self.fichas_reveladas = []
+        self.modo_bot = modo_bot
 
         # Jugadores
         self.jugador_izq = Jugador("Izquierda")
@@ -67,9 +68,25 @@ class MemoryGear:
             self.cambiar_turno()
         self.master.after(1000, self.update_timer)
 
+    def jugar_contra_bot(self):
+        #El bot elige aleatoriamente dos fichas de su lado que estén ocultas.
+        if self.turno != "Derecha" or not self.juego_activo:
+            return
+        fichas_ocultas = [f for f in self.fichas if self.lado_fichas[f.id] == "Derecha" and f.estado == "oculta"]
+        if len(fichas_ocultas) < 2:
+            return
+        seleccion = random.sample(fichas_ocultas, 2)
+        for ficha in seleccion:
+            self.revelar_ficha(ficha)
+
     def cambiar_turno(self):
         self.turno = "Derecha" if self.turno == "Izquierda" else "Izquierda"
         self.timer_value = 0  # Reinicia el tiempo al cambiar turno
+        # Si está activado el modo bot y es el turno del bot, juega automáticamente
+        if self.modo_bot and self.turno == "Derecha":
+            self.master.after(800, self.jugar_contra_bot)
+    
+
 
     def restar_tiempo(self, segundos):
         self.timer_value = max(0, self.timer_value - segundos)
