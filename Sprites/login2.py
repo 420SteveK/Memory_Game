@@ -2,14 +2,16 @@ from tkinter import messagebox, font as tkfont
 import tkinter as tk
 from tkinter import font as tkfont
 from tkinter import messagebox, simpledialog
-import face_gui
+from face_guiPrueba import Register_Face
+
+from GUI import MemoryGameMenu
 
 
 class SakuraLogin(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Sakura Login - Spotify Inspired")
-        self.geometry("430x520")
+        self.geometry("430x580")
         self.configure(bg="#1a1a1a")
         self.resizable(False, False)
 
@@ -23,7 +25,7 @@ class SakuraLogin(tk.Tk):
         self.container = tk.Frame(
             self, bg="#2c2c2c", bd=0, highlightthickness=0)
         self.container.place(relx=0.5, rely=0.5,
-                             anchor="center", width=370, height=460)
+                             anchor="center", width=370, height=520)
 
         # Title label
         self.title_label = tk.Label(
@@ -87,24 +89,8 @@ class SakuraLogin(tk.Tk):
         self.exit_btn.grid(row=0, column=1, padx=7, pady=6)
         self._add_hover(self.exit_btn, "#ffc0cb", "#ff1493")
 
-        # Register button for face registration
+        # Botón para registrar credenciales (en vez de rostro)
         self.register_btn = tk.Button(
-            self.container,
-            text="Ingresar mediante reconocimiento facial",
-            font=self.font_button,
-            bg="#ff69b4",
-            fg="#1a1a1a",
-            activebackground="#ff1493",
-            activeforeground="#fff",
-            relief="flat",
-            width=30,
-            command=self.login_face  # Usa el método que ya tienes
-        )
-        self.register_btn.pack(pady=(10, 12))
-        self._add_hover(self.register_btn, "#ff69b4", "#ff1493")
-
-        # New Register Credentials button
-        self.register_credentials_btn = tk.Button(
             self.container,
             text="Registrar Credenciales",
             font=self.font_button,
@@ -114,15 +100,15 @@ class SakuraLogin(tk.Tk):
             activeforeground="#fff",
             relief="flat",
             width=30,
-            command=self.register_credentials_popup
+            command=self.register_credentials_popup  # <-- Cambia aquí
         )
-        self.register_credentials_btn.pack(pady=(10, 12))
-        self._add_hover(self.register_credentials_btn, "#ff69b4", "#ff1493")
+        self.register_btn.pack(pady=(10, 12))
+        self._add_hover(self.register_btn, "#ff69b4", "#ff1493")
 
-        # Login with facial recognition button
+        # Botón para iniciar sesión con rostro
         self.face_btn = tk.Button(
             self.container,
-            text=" Log in con reconocimiento facial  \U0001F464",
+            text="Iniciar sesión con rostro \U0001F464",
             font=self.font_button,
             bg="#ff69b4",
             fg="#1a1a1a",
@@ -133,7 +119,23 @@ class SakuraLogin(tk.Tk):
             command=self.login_face
         )
         self.face_btn.pack()
-        self._add_hover(self.face_btn, "#ff69b4", "#ff1493")
+
+        # Botón para registrar rostro
+        self.register_face_btn = tk.Button(
+            self.container,
+            text="Registrar rostro",
+            font=self.font_button,
+            bg="#ffb6c1",
+            fg="#1a1a1a",
+            activebackground="#ff69b4",
+            activeforeground="#fff",
+            relief="flat",
+            width=30,
+            command=self.register_face
+        )
+        # Aquí sí puedes poner el pady
+        self.register_face_btn.pack(pady=(16, 12))
+        self._add_hover(self.register_face_btn, "#ffb6c1", "#ff69b4")
 
         # Subtle shadow effect using empty label (fake shadow)
         self.shadow_label = tk.Label(
@@ -167,7 +169,6 @@ class SakuraLogin(tk.Tk):
                 for linea in f:
                     try:
                         datos = eval(linea.strip())
-                        # datos es una lista de listas: [[usuario, contrasena]]
                         if isinstance(datos, list) and len(datos) > 0 and isinstance(datos[0], list):
                             if datos[0][0] == username and datos[0][1] == password:
                                 encontrado = True
@@ -179,7 +180,8 @@ class SakuraLogin(tk.Tk):
             return
 
         if encontrado:
-            messagebox.showinfo("Confirmado", f"Bienvenid@, {username}!")
+            self.destroy()  # Cierra la ventana de login
+            MemoryGameMenu()      # Abre el menú principal
         else:
             messagebox.showerror("Usuario no encontrado",
                                  "Usuario o contraseña incorrectos.")
@@ -274,9 +276,10 @@ class SakuraLogin(tk.Tk):
         popup.protocol("WM_DELETE_WINDOW", on_close)
 
     def login_face(self):
-        # Open the facial recognition window
-        face_window = face_gui.face_gui(self)
-        face_window.grab_set()  # Make it modal
+        Register_Face(self).login_with_face_gui()
+
+    def register_face(self):
+        Register_Face(self).register_face_gui()
 
 
 if __name__ == "__main__":
@@ -291,7 +294,7 @@ if __name__ == "__main__":
     app.mainloop()
 
 
-class face_gui(tk.Toplevel):
+class face_guiPrueba(tk.Toplevel):
     def __init__(self, master=None):
         super().__init__(master)
         self.title("Reconocimiento Facial (LBPH)")
@@ -325,11 +328,3 @@ class face_gui(tk.Toplevel):
                   bg="#1a1a1a", fg="#ffc0cb", activebackground="#ff1493",
                   activeforeground="#fff", relief="flat", width=28, height=2,
                   command=self.destroy).pack(pady=10)
-
-    def register_face(self):
-        messagebox.showinfo("Registrar rostro",
-                            "Función de registro de rostro aquí.")
-
-    def login_face(self):
-        messagebox.showinfo(
-            "Login rostro", "Función de login con rostro aquí.")

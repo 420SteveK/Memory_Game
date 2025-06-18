@@ -1,5 +1,5 @@
 class Jugador:
-    def __init__(self, nombre, ):
+    def __init__(self, nombre):
         self.nombre = nombre
         self.puntaje = 0
         self.intentos = 0
